@@ -105,7 +105,7 @@ class AccountMove(models.Model):
         self.ensure_one()
 
         report = self.env.ref(
-            "report_assistance.action_delivery_guide_report_pdf"
+            "remito_account.action_delivery_guide_report_pdf"
         )
 
         return report.report_action(self.l10n_ar_remito_ids)

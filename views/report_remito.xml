@@ -325,7 +325,7 @@
 
             <t
                 t-set="custom_header"
-                t-value="'report_assistance.custom_remito_header'"
+                t-value="'remito_account.custom_remito_header'"
             />
 
 
@@ -766,7 +766,7 @@
                 <t t-foreach="docs" t-as="o">
 
                     <t
-                        t-call="report_assistance.report_remito_document"
+                        t-call="remito_account.report_remito_document"
                         t-lang="o.company_id.partner_id.lang or o.env.lang"
                     />
 
@@ -815,8 +815,8 @@
             <field name="name">Remito(AR)</field>
             <field name="model">l10n_ar.remito</field>
             <field name="report_type">qweb-pdf</field>
-            <field name="report_name">report_assistance.report_delivery_guide</field>
-            <field name="report_file">report_assistance.report_delivery_guide</field>
+            <field name="report_name">remito_account.report_delivery_guide</field>
+            <field name="report_file">remito_account.report_delivery_guide</field>
             <field name="print_report_name">'Remito - %s' % (object.name or 's/n')</field>
             <field name="binding_model_id" ref="model_l10n_ar_remito"/>
             <field name="binding_type">report</field>

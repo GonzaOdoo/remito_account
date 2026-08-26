@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Ajustes Remito y Reportes de Asistencias",
+    'name': "Ajustes Remito",
 
     'summary': """
         Modulo para ajustes de remito.
