@@ -42,7 +42,10 @@
                     </page>
 
                 </xpath>
-
+                <xpath expr="//header" position="inside">
+                    <button string="Generar Remitos" name="l10n_ar_action_create_delivery_guides" type="object" invisible="company_id in [1] or state == 'draft' or l10n_ar_remito_ids"/>
+                    <button string="Imprimir Remito" name="l10n_ar_action_print_delivery_guides" type="object" invisible="not l10n_ar_remito_ids"/>
+                </xpath>
             </field>
         </record>
 

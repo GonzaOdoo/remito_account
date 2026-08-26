@@ -19,11 +19,12 @@
     'version': '1.0',
 
     # any module necessary for this one to work correctly
-    'depends': ['sale','l10n_ar_stock','account'],
+    'depends': ['sale','l10n_ar_stock','account','stock'],
 
     # always loaded
     "data": ["security/ir.model.access.csv",
              "views/report_remito.xml",
              "views/account_move.xml",
+             "views/stock_picking_type.xml",
             ],
 }

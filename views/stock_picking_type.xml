@@ -1,0 +1,17 @@
+<odoo>
+    <record id="view_picking_type_form_inherit_delivery_guides_warning" model="ir.ui.view">
+        <field name="name">stock.picking.type.form.inherit.delivery.guides.warning</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="stock.view_picking_type_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='l10n_ar_sequence_number_end']" position="after">
+                <field name="l10n_ar_delivery_guides_warning_threshold"/>
+                <field name="l10n_ar_delivery_guides_warning_user_ids"
+                    widget="many2many_tags"/>
+            </xpath>
+            <xpath expr="//sheet" position="after">
+                <chatter/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
