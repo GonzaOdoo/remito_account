@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <template id="custom_remito_header">
+
+            <div>
+
+                <div class="mb-3">
+
+                    <!-- PARTE SUPERIOR -->
+
+                    <div class="row mb-2">
+
+                        <!-- LOGO -->
+
+                        <div name="left-upper-side" class="col-5">
+
+                            <t t-if="not pre_printed_report">
+
+                                <t
+                                    t-set="is_outgoing"
+                                    t-value="o.picking_ids and o.picking_ids[0].picking_type_code == 'outgoing'"
+                                />
+
+                                <t t-if="o.company_id.x_studio_logo">
+
+                                    <img
+                                        t-att-src="image_data_uri(o.company_id.x_studio_logo)"
+                                        style="max-height: 95px;"
+                                        alt="Logo"
+                                    />
+
+                                </t>
+
+                                <t t-else="">
+
+                                    <img
+                                        t-if="o.company_id.logo"
+                                        t-att-src="image_data_uri(o.company_id.logo)"
+                                        style="max-height: 65px;"
+                                        alt="Logo"
+                                    />
+
+                                </t>
+
+                            </t>
+
+                        </div>
+
+
+                        <!-- CENTRO -->
+
+                        <div
+                            name="center-upper"
+                            class="col-2 text-center"
+                            t-att-style="'color: %s;' % o.company_id.primary_color"
+                        >
+
+                            <span
+                                id="withholding_legend"
+                                style="display: inline-block; text-align: center; line-height: 8px;"
+                            >
+
+                                <h1 style="line-height: 35px;">
+
+                                    <strong>
+
+                                        <span
+                                            t-out="not pre_printed_report and document_letter or ' '"
+                                        />
+
+                                    </strong>
+
+                                </h1>
+
+                                <span
+                                    style="font-size: x-small;"
+                                    t-out="not pre_printed_report and document_legend or ' '"
+                                />
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- TÍTULO -->
+
+                        <div
+                            name="right-upper-side"
+                            class="col-5 text-end"
+                            style="padding-left: 0px;"
+                        >
+
+                            <t t-if="not pre_printed_report">
+
+                                <h4
+                                    t-att-style="'color: %s;' % o.company_id.primary_color"
+                                >
+
+                                    <strong>
+
+                                        <span t-out="report_name"/>
+
+                                    </strong>
+
+                                </h4>
+
+                            </t>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- INFORMACIÓN EMPRESA / DOCUMENTO -->
+
+                    <div class="row">
+
+                        <!-- EMPRESA -->
+
+                        <div
+                            class="col-6"
+                            style="padding-right: 0px;"
+                        >
+
+                            <t t-if="not pre_printed_report">
+
+                                <!--
+                                <br/>
+
+                                <span t-field="o.company_id.l10n_ar_afip_responsibility_type_id"/>
+
+                                <span
+                                    t-att-style="'color: %s;' % o.company_id.secondary_color"
+                                >
+                                    - CUIT:
+                                </span>
+
+                                <span t-field="o.company_id.partner_id.l10n_ar_formatted_vat"/>
+
+                                <br/>
+
+                                <span
+                                    t-att-style="'color: %s;' % o.company_id.secondary_color"
+                                >
+                                    IIBB:
+                                </span>
+
+                                <span
+                                    t-out="o.company_id.l10n_ar_gross_income_type == 'exempt' and 'Exento' or o.company_id.l10n_ar_gross_income_number"
+                                />
+
+                                <span
+                                    t-att-style="'color: %s;' % o.company_id.secondary_color"
+                                >
+                                    - Inicio de actividades:
+                                </span>
+
+                                <span t-field="o.company_id.l10n_ar_afip_start_date"/>
+                                -->
+
+                            </t>
+
+                        </div>
+
+
+                        <!-- DOCUMENTO -->
+
+                        <div
+                            id="l10n_ar_header_right"
+                            class="col-6 text-end"
+                            style="padding-left: 0px;margin-top:-20px !important"
+                        >
+
+                            <span>
+                                <strong>DOCUMENTO NO VÁLIDO COMO FACTURA</strong>
+                            </span>
+
+                            <br/>
+
+                            <t t-if="not pre_printed_report">
+
+                                <span
+                                    t-att-style="'color: %s;' % o.company_id.secondary_color"
+                                >
+                                    Nro de Remito:
+                                </span>
+
+                                <span t-out="report_number"/>
+
+                            </t>
+
+                            <br/>
+
+                            <span
+                                t-att-style="'color: %s;' % o.company_id.secondary_color"
+                            >
+                                Fecha:
+                            </span>
+
+                            <span
+                                t-out="report_date"
+                                t-options='{"widget": "date"}'
+                            />
+
+                            <t t-if="not pre_printed_report">
+
+                                <br/>
+
+                                <span t-field="o.company_id.l10n_ar_afip_responsibility_type_id"/>
+
+                                <span
+                                    t-att-style="'color: %s;' % o.company_id.secondary_color"
+                                >
+                                     CUIT:
+                                </span>
+
+                                <span t-field="o.company_id.partner_id.l10n_ar_formatted_vat"/>
+
+                                <br/>
+
+                                <!--
+                                <span
+                                    t-att-style="'color: %s;' % o.company_id.secondary_color"
+                                >
+                                    IIBB:
+                                </span>
+
+                                <span
+                                    t-out="o.company_id.l10n_ar_gross_income_type == 'exempt' and 'Exento' or o.company_id.l10n_ar_gross_income_number"
+                                />
+
+                                <span
+                                    t-att-style="'color: %s;' % o.company_id.secondary_color"
+                                >
+                                    - Inicio de actividades:
+                                </span>
+
+                                <span t-field="o.company_id.l10n_ar_afip_start_date"/>
+                                -->
+
+                            </t>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </template>
+
+
+        <!-- ========================================================= -->
+        <!-- REMITO DOCUMENT                                           -->
+        <!-- ========================================================= -->
+
+        <template id="report_remito_document">
+
+            <t t-set="partner" t-value="o.partner_id"/>
+
+            <t
+                t-set="lang"
+                t-value="o.company_id.partner_id.lang or o.env.lang"
+            />
+
+            <t t-set="pre_printed_report" t-value="False"/>
+
+            <t t-set="header_address" t-value="o.company_id"/>
+
+            <t
+                t-set="report_date"
+                t-value="o.invoice_id.invoice_date or o.create_date"
+            />
+
+            <t
+                t-set="report_number"
+                t-value="o.name"
+            />
+
+            <t t-set="document_letter" t-value="False"/>
+
+            <t t-set="document_legend" t-value="False"/>
+
+            <t t-set="report_name" t-value="'Remito'"/>
+
+
+            <!-- ===================================================== -->
+            <!-- DATOS FISCALES                                         -->
+            <!-- ===================================================== -->
+
+            <t t-if="o.l10n_ar_cai_data">
+
+                <t
+                    t-set="stock_doc_type"
+                    t-value="o.env['l10n_latam.document.type'].browse(
+                        o.l10n_ar_cai_data['document_type_id']
+                    )"
+                />
+
+                <t
+                    t-set="document_letter"
+                    t-value="stock_doc_type.l10n_ar_letter"
+                />
+
+                <t
+                    t-set="document_legend"
+                    t-value="stock_doc_type.code and
+                            'Cod. %02d' % int(stock_doc_type.code) or ''"
+                />
+
+                <t
+                    t-set="report_name"
+                    t-value="stock_doc_type.report_name"
+                />
+
+            </t>
+
+
+            <!-- ===================================================== -->
+            <!-- CUSTOM HEADER                                         -->
+            <!-- ===================================================== -->
+
+            <t
+                t-set="custom_header"
+                t-value="'report_assistance.custom_remito_header'"
+            />
+
+
+            <!-- ===================================================== -->
+            <!-- CUSTOM FOOTER                                         -->
+            <!-- ===================================================== -->
+
+            <!--
+                IMPORTANTE:
+                El footer se define antes del external_layout para que
+                el layout pueda consumir custom_footer.
+            -->
+
+            <t t-set="custom_footer">
+
+                <div class="row">
+
+                    <!-- IZQUIERDA -->
+
+                    <div class="col-7 text-start">
+
+                        <div t-if="report_type == 'pdf'">
+
+                            Página:
+                            <span class="page"/>
+                            /
+                            <span class="topage"/>
+
+                        </div>
+
+                        <t t-if="o.l10n_ar_cai_data">
+
+                            <div class="mt-1">
+
+                                Secuencia desde
+
+                                <strong>
+
+                                    <t
+                                        t-out="
+                                            o.l10n_ar_cai_data[
+                                                'sequence_number_start'
+                                            ]
+                                        "
+                                    />
+
+                                </strong>
+
+                                hasta
+
+                                <strong>
+
+                                    <t
+                                        t-out="
+                                            o.l10n_ar_cai_data[
+                                                'sequence_number_end'
+                                            ]
+                                        "
+                                    />
+
+                                </strong>
+
+                            </div>
+
+                        </t>
+
+                    </div>
+
+
+                    <!-- DERECHA -->
+
+                    <div
+                        class="col-5 text-end"
+                        t-if="o.l10n_ar_cai_data"
+                    >
+
+                        <div>
+
+                            <strong>CAI:</strong>
+
+                            <t
+                                t-out="
+                                    o.l10n_ar_cai_data[
+                                        'cai_authorization_code'
+                                    ]
+                                "
+                            />
+
+                        </div>
+
+                        <div>
+
+                            <strong>Vencimiento del CAI:</strong>
+
+                            <span
+                                t-out="
+                                    o.l10n_ar_cai_data[
+                                        'cai_expiration_date'
+                                    ]
+                                "
+                            />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </t>
+
+
+            <!-- ===================================================== -->
+            <!-- ESTILOS DEL REPORTE                                   -->
+            <!-- ===================================================== -->
+
+            <style>
+                /*
+                 * Fuerza la eliminación de bordes de las tablas del
+                 * remito independientemente de los estilos de Bootstrap
+                 * o del navegador/renderizador PDF.
+                 */
+
+                table.remito-table {
+                    border-collapse: collapse !important;
+                    border: 0 !important;
+                }
+
+                table.remito-table thead,
+                table.remito-table tbody,
+                table.remito-table tr,
+                table.remito-table th,
+                table.remito-table td {
+                    border: 0 !important;
+                    border-style: none !important;
+                    box-shadow: none !important;
+                }
+            </style>
+
+
+            <!-- ===================================================== -->
+            <!-- EXTERNAL LAYOUT                                       -->
+            <!-- ===================================================== -->
+
+            <t t-call="web.external_layout">
+
+                <div class="page">
+
+
+                    <!-- ================================================= -->
+                    <!-- CUSTOMER / DOCUMENT INFORMATION                  -->
+                    <!-- ================================================= -->
+
+                    <div id="informations">
+
+                        <div class="row">
+
+                            <!-- CUSTOMER -->
+
+                            <div class="col-6">
+
+                                <strong>Cliente: </strong>
+
+                                <span
+                                    t-field="o.partner_id.commercial_partner_id.name"
+                                />
+
+                                <br/>
+
+                                <span
+                                    t-field="o.partner_id"
+                                    t-options="{
+                                        'widget': 'contact',
+                                        'fields': ['address'],
+                                        'no_marker': true,
+                                        'no_tag_br': True
+                                    }"
+                                />
+
+                                <br/>
+
+                                <strong>Condición IVA: </strong>
+
+                                <span
+                                    t-field="o.partner_id.l10n_ar_afip_responsibility_type_id"
+                                />
+
+                                <t t-if="
+                                    o.partner_id.vat
+                                    and o.partner_id.l10n_latam_identification_type_id
+                                    and o.partner_id.l10n_latam_identification_type_id.l10n_ar_afip_code != '99'
+                                ">
+
+                                    <br/>
+
+                                    <strong>
+
+                                        <t
+                                            t-out="
+                                                o.partner_id.l10n_latam_identification_type_id.name
+                                                or
+                                                o.company_id.account_fiscal_country_id.vat_label
+                                            "
+                                        />:
+
+                                    </strong>
+
+                                    <span
+                                        t-if="o.partner_id.l10n_ar_vat"
+                                        t-out="o.partner_id.l10n_ar_formatted_vat"
+                                    />
+
+                                    <span
+                                        t-else=""
+                                        t-out="o.partner_id.vat"
+                                    />
+
+                                </t>
+
+                            </div>
+
+
+                            <!-- DOCUMENT -->
+
+                            <div class="col-6">
+
+                                <strong>Factura: </strong>
+
+                                <span
+                                    t-if="o.invoice_id"
+                                    t-field="o.invoice_id.name"
+                                />
+
+                                <br/>
+
+                                <strong>Órdenes de venta: </strong>
+
+                                <t t-if="o.sale_order_ids">
+
+                                    <t
+                                        t-foreach="o.sale_order_ids"
+                                        t-as="sale_order"
+                                    >
+
+                                        <span t-field="sale_order.name"/>
+
+                                        <t t-if="not sale_order_last">
+                                            ,
+                                        </t>
+
+                                    </t>
+
+                                </t>
+
+                                <t t-else="">
+                                    -
+                                </t>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- DELIVERY LINES                                    -->
+                    <!-- ================================================= -->
+
+                    <div class="mt-4">
+
+                        <t t-foreach="o.picking_ids" t-as="picking">
+
+                            <t t-set="o" t-value="picking"/>
+
+                            <t
+                                t-set="format_number"
+                                t-value="lambda x: int(x) if x == int(x) else x"
+                            />
+
+
+                            <!-- ================================================= -->
+                            <!-- PICKING AÚN NO VALIDADO                         -->
+                            <!-- ================================================= -->
+
+                            <table
+                                class="table table-sm remito-table"
+                                t-if="o.state != 'done'"
+                                name="stock_move_table"
+                            >
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Producto</th>
+
+                                        <th class="text-center">
+                                            Orden
+                                        </th>
+
+                                        <th class="text-end">
+                                            Ordenado
+                                        </th>
+
+                                        <th class="text-end">
+                                            Entregado
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    <t
+                                        t-set="lines"
+                                        t-value="o.move_ids.filtered(lambda x: x.product_uom_qty)"
+                                    />
+
+                                    <tr
+                                        t-foreach="lines"
+                                        t-as="move"
+                                    >
+
+                                        <td>
+
+                                            <span t-field="move.product_id"/>
+
+                                            <p
+                                                t-if="
+                                                    move.description_picking
+                                                    and move.description_picking != move.product_id.name
+                                                "
+                                            >
+
+                                                <span
+                                                    t-out="move._get_report_description_picking()"
+                                                />
+
+                                            </p>
+
+                                        </td>
+
+                                        <td class="text-center">
+
+                                            <span
+                                                t-if="move.sale_line_id.order_id"
+                                                t-field="move.sale_line_id.order_id.name"
+                                            />
+
+                                        </td>
+
+                                        <td class="text-end">
+
+                                            <span
+                                                t-out="format_number(move.product_uom_qty)"
+                                            />
+
+                                            <span
+                                                t-field="move.product_uom"
+                                                groups="uom.group_uom"
+                                            />
+
+                                        </td>
+
+                                        <td class="text-end">
+
+                                            <span
+                                                t-out="format_number(move.quantity)"
+                                            />
+
+                                            <span
+                                                t-field="move.product_uom"
+                                                groups="uom.group_uom"
+                                            />
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+
+                            <!-- ================================================= -->
+                            <!-- PICKING VALIDADO                                  -->
+                            <!-- ================================================= -->
+                            
+                            <table
+                                class="table table-sm remito-table"
+                                t-elif="o.move_line_ids and o.state == 'done'"
+                                name="stock_move_line_table"
+                            >
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th class="text-center">Orden</th>
+                                        <th class="text-end">Ordenado</th>
+                                        <th class="text-end">Entregado</th>
+                                        <th class="text-end">Bultos</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o._get_remito_aggregated_lines()" t-as="line">
+                                        <td><span t-out="line['product_name']"/></td>
+                                        <td class="text-center"><span t-out="line['order_name']"/></td>
+                                        <td class="text-end">
+                                            <span t-out="line['ordered_qty']"/> <span t-out="line['uom_name']"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-out="line['delivered_qty']"/> <span t-out="line['uom_name']"/>
+                                        </td>
+                                        <td class="text-end"><span t-out="line['bultos']"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </t>
+
+                    </div>
+
+                </div>
+
+            </t>
+
+        </template>
+
+
+        <!-- ========================================================= -->
+        <!-- REPORT ROOT                                               -->
+        <!-- ========================================================= -->
+
+        <template id="report_delivery_guide">
+
+            <t t-call="web.html_container">
+
+                <t t-foreach="docs" t-as="o">
+
+                    <t
+                        t-call="report_assistance.report_remito_document"
+                        t-lang="o.company_id.partner_id.lang or o.env.lang"
+                    />
+
+                </t>
+
+            </t>
+
+        </template>
+
+
+        <!-- ========================================================= -->
+        <!-- AGGREGATED MOVE LINES                                    -->
+        <!-- ========================================================= -->
+
+        <template
+            id="stock_report_delivery_aggregated_move_lines_order"
+            inherit_id="stock.stock_report_delivery_aggregated_move_lines"
+        >
+
+            <xpath
+                expr="//td[@name='move_line_aggregated_qty_ordered']"
+                position="before"
+            >
+
+                <td
+                    t-if="show_sale_order"
+                    class="text-center"
+                >
+
+                    <span
+                        t-out="aggregated_lines[line]['move'].sale_line_id.order_id.name"
+                    />
+
+                </td>
+
+            </xpath>
+
+        </template>
+
+
+        <!-- ========================================================= -->
+        <!-- REPORT ACTION                                              -->
+        <!-- ========================================================= -->
+
+        <record id="action_delivery_guide_report_pdf" model="ir.actions.report">
+            <field name="name">Remito(AR)</field>
+            <field name="model">l10n_ar.remito</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">report_assistance.report_delivery_guide</field>
+            <field name="report_file">report_assistance.report_delivery_guide</field>
+            <field name="print_report_name">'Remito - %s' % (object.name or 's/n')</field>
+            <field name="binding_model_id" ref="model_l10n_ar_remito"/>
+            <field name="binding_type">report</field>
+            <field name="attachment">'Remito - %s.pdf' % (object.name or 's/n')</field>
+        </record>
+
+    </data>
+</odoo>
