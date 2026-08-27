@@ -137,7 +137,7 @@ class StockPicking(models.Model):
                 'order_name': move.sale_line_id.order_id.name if move.sale_line_id else '',
                 'ordered_qty': sum(p_lines.mapped('move_id.product_uom_qty')),
                 'delivered_qty': sum(p_lines.mapped('quantity')),
-                'uom_name': move.product_uom_id.name if move else '',
+                'uom_name': move.product_uom.name if move else '',
                 'bultos': sum(p_lines.mapped('quantity')),
             })
         return result
