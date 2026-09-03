@@ -299,7 +299,7 @@
             <!-- CUSTOM HEADER                                         -->
             <!-- ===================================================== -->
 
-            <t t-set="custom_header" t-value="'report_assistance.custom_remito_header'"/>
+            <t t-set="custom_header" t-value="'remito_account.custom_remito_header'"/>
 
 
             <!-- ===================================================== -->
@@ -605,7 +605,6 @@
                 </div>
 
             </t>
-
 
         </template>
 
