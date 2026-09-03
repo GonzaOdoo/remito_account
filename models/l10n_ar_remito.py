@@ -277,3 +277,137 @@ class L10nArRemito(models.Model):
             # Verificar si quedan pocos Remitos disponibles.
             picking_type._check_delivery_guides_remaining()
         return True
+
+    def _get_remito_aggregated_lines(self):
+        """Agrupa las líneas entregadas por producto final (kit o simple),
+        considerando únicamente la cantidad facturada en la factura asociada.
+        """
+        self.ensure_one()
+    
+        result = []
+        processed = self.env["stock.move.line"]
+    
+        # Cantidad facturada por cada línea de venta.
+        #
+        # Una misma sale.order.line puede aparecer relacionada a más de una
+        # línea de factura, por lo que acumulamos las cantidades.
+        invoiced_qty_by_sale_line = {}
+    
+        for invoice_line in self.invoice_id.invoice_line_ids:
+            for sale_line in invoice_line.sale_line_ids:
+                invoiced_qty_by_sale_line[sale_line.id] = (
+                    invoiced_qty_by_sale_line.get(sale_line.id, 0.0)
+                    + invoice_line.quantity
+                )
+    
+        # Todas las líneas entregadas relacionadas con la factura.
+        move_lines = self.picking_ids.mapped("move_line_ids").filtered(
+            lambda l:
+                l.quantity
+                and l.move_id.sale_line_id
+                and l.move_id.sale_line_id.id in invoiced_qty_by_sale_line
+        )
+    
+        # ============================================================
+        # KITS
+        # ============================================================
+    
+        kit_moves = move_lines.filtered(
+            lambda l: l.move_id.bom_line_id
+        )
+    
+        kit_sale_lines = kit_moves.mapped(
+            "move_id.sale_line_id"
+        )
+    
+        for sale_line in kit_sale_lines:
+            kit_lines = kit_moves.filtered(
+                lambda l:
+                    l.move_id.sale_line_id == sale_line
+            )
+    
+            invoiced_qty = invoiced_qty_by_sale_line.get(
+                sale_line.id,
+                0.0,
+            )
+    
+            delivered_qty = sale_line.qty_delivered
+    
+            # No mostrar más cantidad de la que corresponde a esta factura.
+            quantity = min(
+                delivered_qty,
+                invoiced_qty,
+            )
+    
+            if not quantity:
+                continue
+            total_delivered_qty = sale_line.qty_delivered
+            bultos = (
+                sum(kit_lines.mapped("quantity"))
+                * quantity
+                / total_delivered_qty
+                if total_delivered_qty
+                else 0.0
+            )
+            result.append({
+                "product_name": sale_line.product_id.display_name,
+                "order_name": sale_line.order_id.name,
+                "ordered_qty": invoiced_qty,
+                "delivered_qty": quantity,
+                "uom_name": sale_line.product_uom_id.name,
+                "bultos": bultos,
+            })
+    
+            processed |= kit_lines
+    
+        # ============================================================
+        # PRODUCTOS SIMPLES
+        # ============================================================
+    
+        remaining_lines = move_lines - processed
+    
+        for product in remaining_lines.mapped("product_id"):
+            p_lines = remaining_lines.filtered(
+                lambda l:
+                    l.product_id == product
+            )
+    
+            # Agrupamos por producto, como hacía el método original.
+            sale_lines = p_lines.mapped("move_id.sale_line_id")
+    
+            invoiced_qty = sum(
+                invoiced_qty_by_sale_line.get(
+                    sale_line.id,
+                    0.0,
+                )
+                for sale_line in sale_lines
+            )
+    
+            delivered_qty = sum(
+                p_lines.mapped("quantity")
+            )
+    
+            quantity = min(
+                delivered_qty,
+                invoiced_qty,
+            )
+    
+            if not quantity:
+                continue
+    
+            move = p_lines[:1].move_id
+    
+            result.append({
+                "product_name": product.display_name,
+                "order_name": (
+                    move.sale_line_id.order_id.name
+                    if move.sale_line_id
+                    else ""
+                ),
+                "ordered_qty": invoiced_qty,
+                "delivered_qty": quantity,
+                "uom_name": move.product_uom.name if move else "",
+                "bultos": quantity,
+            })
+    
+        return result

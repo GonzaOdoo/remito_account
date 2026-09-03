@@ -261,24 +261,15 @@
 
             <t t-set="partner" t-value="o.partner_id"/>
 
-            <t
-                t-set="lang"
-                t-value="o.company_id.partner_id.lang or o.env.lang"
-            />
+            <t t-set="lang" t-value="o.company_id.partner_id.lang or o.env.lang"/>
 
             <t t-set="pre_printed_report" t-value="False"/>
 
             <t t-set="header_address" t-value="o.company_id"/>
 
-            <t
-                t-set="report_date"
-                t-value="o.invoice_id.invoice_date or o.create_date"
-            />
+            <t t-set="report_date" t-value="o.invoice_id.invoice_date or o.create_date"/>
 
-            <t
-                t-set="report_number"
-                t-value="o.name"
-            />
+            <t t-set="report_number" t-value="o.name"/>
 
             <t t-set="document_letter" t-value="False"/>
 
@@ -293,28 +284,13 @@
 
             <t t-if="o.l10n_ar_cai_data">
 
-                <t
-                    t-set="stock_doc_type"
-                    t-value="o.env['l10n_latam.document.type'].browse(
-                        o.l10n_ar_cai_data['document_type_id']
-                    )"
-                />
+                <t t-set="stock_doc_type" t-value="o.env['l10n_latam.document.type'].browse(                         o.l10n_ar_cai_data['document_type_id']                     )"/>
 
-                <t
-                    t-set="document_letter"
-                    t-value="stock_doc_type.l10n_ar_letter"
-                />
+                <t t-set="document_letter" t-value="stock_doc_type.l10n_ar_letter"/>
 
-                <t
-                    t-set="document_legend"
-                    t-value="stock_doc_type.code and
-                            'Cod. %02d' % int(stock_doc_type.code) or ''"
-                />
+                <t t-set="document_legend" t-value="stock_doc_type.code and                             'Cod. %02d' % int(stock_doc_type.code) or ''"/>
 
-                <t
-                    t-set="report_name"
-                    t-value="stock_doc_type.report_name"
-                />
+                <t t-set="report_name" t-value="stock_doc_type.report_name"/>
 
             </t>
 
@@ -323,10 +299,7 @@
             <!-- CUSTOM HEADER                                         -->
             <!-- ===================================================== -->
 
-            <t
-                t-set="custom_header"
-                t-value="'remito_account.custom_remito_header'"
-            />
+            <t t-set="custom_header" t-value="'report_assistance.custom_remito_header'"/>
 
 
             <!-- ===================================================== -->
@@ -364,13 +337,7 @@
 
                                 <strong>
 
-                                    <t
-                                        t-out="
-                                            o.l10n_ar_cai_data[
-                                                'sequence_number_start'
-                                            ]
-                                        "
-                                    />
+                                    <t t-out="                                             o.l10n_ar_cai_data[                                                 'sequence_number_start'                                             ]                                         "/>
 
                                 </strong>
 
@@ -378,13 +345,7 @@
 
                                 <strong>
 
-                                    <t
-                                        t-out="
-                                            o.l10n_ar_cai_data[
-                                                'sequence_number_end'
-                                            ]
-                                        "
-                                    />
+                                    <t t-out="                                             o.l10n_ar_cai_data[                                                 'sequence_number_end'                                             ]                                         "/>
 
                                 </strong>
 
@@ -397,22 +358,13 @@
 
                     <!-- DERECHA -->
 
-                    <div
-                        class="col-5 text-end"
-                        t-if="o.l10n_ar_cai_data"
-                    >
+                    <div class="col-5 text-end" t-if="o.l10n_ar_cai_data">
 
                         <div>
 
                             <strong>CAI:</strong>
 
-                            <t
-                                t-out="
-                                    o.l10n_ar_cai_data[
-                                        'cai_authorization_code'
-                                    ]
-                                "
-                            />
+                            <t t-out="                                     o.l10n_ar_cai_data[                                         'cai_authorization_code'                                     ]                                 "/>
 
                         </div>
 
@@ -420,13 +372,7 @@
 
                             <strong>Vencimiento del CAI:</strong>
 
-                            <span
-                                t-out="
-                                    o.l10n_ar_cai_data[
-                                        'cai_expiration_date'
-                                    ]
-                                "
-                            />
+                            <span t-out="                                     o.l10n_ar_cai_data[                                         'cai_expiration_date'                                     ]                                 "/>
 
                         </div>
 
@@ -443,10 +389,10 @@
 
             <style>
                 /*
-                 * Fuerza la eliminación de bordes de las tablas del
-                 * remito independientemente de los estilos de Bootstrap
-                 * o del navegador/renderizador PDF.
-                 */
+                * Fuerza la eliminación de bordes de las tablas del
+                * remito independientemente de los estilos de Bootstrap
+                * o del navegador/renderizador PDF.
+                */
 
                 table.remito-table {
                     border-collapse: collapse !important;
@@ -479,71 +425,41 @@
                     <!-- ================================================= -->
 
                     <div id="informations">
-
+                        <t t-set="shipping_partner" t-value="o.invoice_id.partner_shipping_id or o.partner_id"/>
                         <div class="row">
 
                             <!-- CUSTOMER -->
 
                             <div class="col-6">
-
+                            
                                 <strong>Cliente: </strong>
-
-                                <span
-                                    t-field="o.partner_id.commercial_partner_id.name"
-                                />
-
+                            
+                                <span t-field="o.partner_id.commercial_partner_id.name"/>
+                            
                                 <br/>
-
-                                <span
-                                    t-field="o.partner_id"
-                                    t-options="{
-                                        'widget': 'contact',
-                                        'fields': ['address'],
-                                        'no_marker': true,
-                                        'no_tag_br': True
-                                    }"
-                                />
-
+                            
+                                <span t-out="shipping_partner" t-options="{                                         'widget': 'contact',                                         'fields': ['address'],                                         'no_marker': true,                                         'no_tag_br': True                                     }"/>
+                            
                                 <br/>
-
+                            
                                 <strong>Condición IVA: </strong>
-
-                                <span
-                                    t-field="o.partner_id.l10n_ar_afip_responsibility_type_id"
-                                />
-
-                                <t t-if="
-                                    o.partner_id.vat
-                                    and o.partner_id.l10n_latam_identification_type_id
-                                    and o.partner_id.l10n_latam_identification_type_id.l10n_ar_afip_code != '99'
-                                ">
-
+                            
+                                <span t-field="o.partner_id.l10n_ar_afip_responsibility_type_id"/>
+                            
+                                <t t-if="                                     o.partner_id.vat                                     and o.partner_id.l10n_latam_identification_type_id                                     and o.partner_id.l10n_latam_identification_type_id.l10n_ar_afip_code != '99'                                 ">
+                            
                                     <br/>
-
+                            
                                     <strong>
-
-                                        <t
-                                            t-out="
-                                                o.partner_id.l10n_latam_identification_type_id.name
-                                                or
-                                                o.company_id.account_fiscal_country_id.vat_label
-                                            "
-                                        />:
-
+                                        <t t-out="                                             o.partner_id.l10n_latam_identification_type_id.name                                             or                                             o.company_id.account_fiscal_country_id.vat_label                                         "/>:
                                     </strong>
-
-                                    <span
-                                        t-if="o.partner_id.l10n_ar_vat"
-                                        t-out="o.partner_id.l10n_ar_formatted_vat"
-                                    />
-
-                                    <span
-                                        t-else=""
-                                        t-out="o.partner_id.vat"
-                                    />
-
+                            
+                                    <span t-if="o.partner_id.l10n_ar_vat" t-out="o.partner_id.l10n_ar_formatted_vat"/>
+                            
+                                    <span t-else="" t-out="o.partner_id.vat"/>
+                            
                                 </t>
-
+                            
                             </div>
 
 
@@ -553,10 +469,7 @@
 
                                 <strong>Factura: </strong>
 
-                                <span
-                                    t-if="o.invoice_id"
-                                    t-field="o.invoice_id.name"
-                                />
+                                <span t-if="o.invoice_id" t-field="o.invoice_id.name"/>
 
                                 <br/>
 
@@ -564,10 +477,7 @@
 
                                 <t t-if="o.sale_order_ids">
 
-                                    <t
-                                        t-foreach="o.sale_order_ids"
-                                        t-as="sale_order"
-                                    >
+                                    <t t-foreach="o.sale_order_ids" t-as="sale_order">
 
                                         <span t-field="sale_order.name"/>
 
@@ -590,167 +500,112 @@
                     </div>
 
 
-                    <!-- ================================================= -->
-                    <!-- DELIVERY LINES                                    -->
-                    <!-- ================================================= -->
+<!-- ================================================= -->
+<!-- DELIVERY LINES                                    -->
+<!-- ================================================= -->
 
-                    <div class="mt-4">
+    <div class="mt-4">
 
-                        <t t-foreach="o.picking_ids" t-as="picking">
+    <!-- PICKING AÚN NO VALIDADO -->
+    <t t-foreach="o.picking_ids" t-as="picking">
 
-                            <t t-set="o" t-value="picking"/>
+        <table class="table table-sm remito-table" t-if="picking.state != 'done'" name="stock_move_table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th class="text-center">
+                        Orden
+                    </th>
+                    <th class="text-end">
+                        Ordenado
+                    </th>
+                    <th class="text-end">
+                        Entregado
+                    </th>
+                </tr>
+            </thead>
 
-                            <t
-                                t-set="format_number"
-                                t-value="lambda x: int(x) if x == int(x) else x"
-                            />
+            <tbody>
+                <t t-set="lines" t-value="picking.move_ids.filtered(lambda x: x.product_uom_qty)"/>
 
+                <tr t-foreach="lines" t-as="move">
+                    <td>
+                        <span t-field="move.product_id"/>
 
-                            <!-- ================================================= -->
-                            <!-- PICKING AÚN NO VALIDADO                         -->
-                            <!-- ================================================= -->
+                        <p t-if="                             move.description_picking                             and move.description_picking != move.product_id.name                         ">
+                            <span t-out="move._get_report_description_picking()"/>
+                        </p>
+                    </td>
 
-                            <table
-                                class="table table-sm remito-table"
-                                t-if="o.state != 'done'"
-                                name="stock_move_table"
-                            >
+                    <td class="text-center">
+                        <span t-if="move.sale_line_id.order_id" t-field="move.sale_line_id.order_id.name"/>
+                    </td>
 
-                                <thead>
+                    <td class="text-end">
+                        <span t-out="format_number(move.product_uom_qty)"/>
+                        <span t-field="move.product_uom" groups="uom.group_uom"/>
+                    </td>
 
-                                    <tr>
+                    <td class="text-end">
+                        <span t-out="format_number(move.quantity)"/>
+                        <span t-field="move.product_uom" groups="uom.group_uom"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-                                        <th>Producto</th>
-
-                                        <th class="text-center">
-                                            Orden
-                                        </th>
-
-                                        <th class="text-end">
-                                            Ordenado
-                                        </th>
-
-                                        <th class="text-end">
-                                            Entregado
-                                        </th>
-
-                                    </tr>
-
-                                </thead>
-
-                                <tbody>
-
-                                    <t
-                                        t-set="lines"
-                                        t-value="o.move_ids.filtered(lambda x: x.product_uom_qty)"
-                                    />
-
-                                    <tr
-                                        t-foreach="lines"
-                                        t-as="move"
-                                    >
-
-                                        <td>
-
-                                            <span t-field="move.product_id"/>
-
-                                            <p
-                                                t-if="
-                                                    move.description_picking
-                                                    and move.description_picking != move.product_id.name
-                                                "
-                                            >
-
-                                                <span
-                                                    t-out="move._get_report_description_picking()"
-                                                />
-
-                                            </p>
-
-                                        </td>
-
-                                        <td class="text-center">
-
-                                            <span
-                                                t-if="move.sale_line_id.order_id"
-                                                t-field="move.sale_line_id.order_id.name"
-                                            />
-
-                                        </td>
-
-                                        <td class="text-end">
-
-                                            <span
-                                                t-out="format_number(move.product_uom_qty)"
-                                            />
-
-                                            <span
-                                                t-field="move.product_uom"
-                                                groups="uom.group_uom"
-                                            />
-
-                                        </td>
-
-                                        <td class="text-end">
-
-                                            <span
-                                                t-out="format_number(move.quantity)"
-                                            />
-
-                                            <span
-                                                t-field="move.product_uom"
-                                                groups="uom.group_uom"
-                                            />
-
-                                        </td>
-
-                                    </tr>
-
-                                </tbody>
-
-                            </table>
+    </t>
 
 
-                            <!-- ================================================= -->
-                            <!-- PICKING VALIDADO                                  -->
-                            <!-- ================================================= -->
-                            
-                            <table
-                                class="table table-sm remito-table"
-                                t-elif="o.move_line_ids and o.state == 'done'"
-                                name="stock_move_line_table"
-                            >
-                                <thead>
-                                    <tr>
-                                        <th>Producto</th>
-                                        <th class="text-center">Orden</th>
-                                        <th class="text-end">Ordenado</th>
-                                        <th class="text-end">Entregado</th>
-                                        <th class="text-end">Bultos</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr t-foreach="o._get_remito_aggregated_lines()" t-as="line">
-                                        <td><span t-out="line['product_name']"/></td>
-                                        <td class="text-center"><span t-out="line['order_name']"/></td>
-                                        <td class="text-end">
-                                            <span t-out="line['ordered_qty']"/> <span t-out="line['uom_name']"/>
-                                        </td>
-                                        <td class="text-end">
-                                            <span t-out="line['delivered_qty']"/> <span t-out="line['uom_name']"/>
-                                        </td>
-                                        <td class="text-end"><span t-out="line['bultos']"/></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+    <!-- PICKINGS VALIDADOS -->
+    <t t-if="o.picking_ids.filtered(lambda p: p.state == 'done')">
 
-                        </t>
+        <table class="table table-sm remito-table" name="stock_move_line_table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th class="text-center">Orden</th>
+                    <th class="text-end">Ordenado</th>
+                    <th class="text-end">Entregado</th>
+                    <th class="text-end">Bultos</th>
+                </tr>
+            </thead>
 
-                    </div>
+            <tbody>
+                <tr t-foreach="o._get_remito_aggregated_lines()" t-as="line">
+                    <td>
+                        <span t-out="line['product_name']"/>
+                    </td>
+
+                    <td class="text-center">
+                        <span t-out="line['order_name']"/>
+                    </td>
+
+                    <td class="text-end">
+                        <span t-out="line['ordered_qty']"/>
+                        <span t-out="line['uom_name']"/>
+                    </td>
+
+                    <td class="text-end">
+                        <span t-out="line['delivered_qty']"/>
+                        <span t-out="line['uom_name']"/>
+                    </td>
+
+                    <td class="text-end">
+                        <span t-out="line['bultos']"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </t>
+
+</div>
 
                 </div>
 
             </t>
+
 
         </template>
 
